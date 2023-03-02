@@ -36,10 +36,10 @@ const uint64_t pipe[1] = { 0xE8E8F0F0E1LL }; // Define the transmit pipe
 RF24 radio(19, 18); // Create a Radio(CE, CSN)
 
 //---( Declare Variables )---/
-int data[9];
-int gotArray[9];
-
+int data[13];
+int gotArray[13];
 int servoAngle;
+float SpeedAdjust = 1; 
 
 //enum Buttons {
 //    Adjust,            // 0
@@ -107,7 +107,20 @@ void loop()   /**** LOOP: RUNS CONSTANTLY ****/
     for (byte i = 0; i < 9; i++) {
         Serial.println(gotArray[i]);
         data[i] = gotArray[i];
-                                    }
+      }
+//Setup to allow "Thotteling" Of Max Speed
+    if (data[10] = 1)    {
+      SpeedAdjust = (SpeedAdjust - 0.25);
+      }
+     if (data[9] = 1)    {
+      SpeedAdjust = (SpeedAdjust + 0.25);
+     }
+    if (SpeedAdjust > 1) {
+     SpeedAdjust = 1;
+     }
+    if (SpeedAdjust < 0) {
+      SpeedAdjust = 0.25;
+     }
 
 //    Serial.println();
 int Forwards = map(data[5] , 255, 5, 1, 100);
@@ -151,10 +164,11 @@ int AnalogStick = map(data[1] , 1, 255, 132 , 54);
 //In case I want to change my == 0 if statement to prevent servo from full sending when I get a full 0 array
 //if ( data[LEFT_ANALOG_X] < 125 && data[LEFT_ANALOG_X] > 0 || data[LEFT_ANALOG_X] > 140  ) {    // jic to stop servo from going when tx is off
 //  myservo.write(AnalogStick) ;  }
-    
-    else {
-      myservo.write(95);
-    }
+
+//Don't think I need this   
+//    else {
+//      myservo.write(95);
+//    }
 //130-131 is max left
 //52-53 is max right  
     
@@ -178,7 +192,7 @@ int AnalogStick = map(data[1] , 1, 255, 132 , 54);
     
 //---( Section for DC Motor Driving )---//  
     if (data[5] > 10) {
-            driver.setOutput(-Forwards); //Forwards
+            driver.setOutput(-Forwards * SpeedAdjust); //Forwards
     }
     else if (data[6] > 10) {
             driver.setOutput(Reverse);//Backwards

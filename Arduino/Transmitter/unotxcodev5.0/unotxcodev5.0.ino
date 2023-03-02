@@ -77,10 +77,10 @@ void loop() {
    Array[6] = (PS4.getAnalogButton(L2));
    Array[7] = (PS4.getAnalogButton(R1));
    Array[8] = (PS4.getAnalogButton(L1));
-//   Array[9] = (PS4.getButtonPress(CROSS));
-//   Array[10] = (PS4.getButtonPress(TRIANGLE));
-//   Array[11] = (PS4.getButtonPress(SQUARE));
-//   Array[12] = (PS4.getButtonPress(CIRCLE));
+   Array[9] = (PS4.getButtonClick(CROSS));
+   Array[10] = (PS4.getButtonClick(TRIANGLE));
+   Array[11] = (PS4.getButtonClick(SQUARE));
+   Array[12] = (PS4.getButtonClick(CIRCLE));
 //   Array[13] = (PS4.getButtonPress(R3));
 //   Array[14] = (PS4.getButtonPress(L3));
 //   Array[15] = (PS4.getButtonPress(LEFT));

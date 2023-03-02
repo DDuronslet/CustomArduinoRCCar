@@ -103,11 +103,13 @@ void loop()   /**** LOOP: RUNS CONSTANTLY ****/
         // Fetch the data payload        
         radio.read(&gotArray, sizeof(gotArray));
     }
-    Serial.println("Received array = ");
+    
+//    Serial.println("Received array = ");
     for (byte i = 0; i < 9; i++) {
-        Serial.println(gotArray[i]);
-        data[i] = gotArray[i];
+//        Serial.println(gotArray[i]);
+          data[i] = gotArray[i];
       }
+
 //Setup to allow "Thotteling" Of Max Speed
     if (data[10] = 1)    {
       SpeedAdjust = (SpeedAdjust - 0.25);
@@ -138,7 +140,7 @@ int Reverse = map(data[6] , 255, 5, 1, 100);
     if (Reverse > 100)  {
       Reverse = 100;
     }
-
+Serial.println(Forwards * SpeedAdjust);
 //Steering Loop
 int AnalogStick = map(data[1] , 1, 255, 132 , 54);
 //     if ( data[LEFT_ANALOG_X] == 0 ) {

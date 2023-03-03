@@ -89,7 +89,7 @@ void loop()   /**** LOOP: RUNS CONSTANTLY ****/
         radio.read(&gotArray, sizeof(gotArray));
     }
     Serial.println("Received array = ");
-    for (byte i = 0; i < 9; i++) {
+    for (byte i = 0; i < 8; i++) {
 //        Serial.println(gotArray[i]);
         data[i] = gotArray[i];
                                     }
@@ -116,16 +116,16 @@ int AnalogStick = map(data[1] , 1, 255, 132 , 54);
 //        driver.setBrakeMode(0);
 //    }
 //---( Section for DC Motor SpeedAdjust )---//    
-    if (data[8] == 4){
+    if (data[7] == 4){
       (SpeedAdjust = 1);  
     }
-    if (data[8] == 3){
+    if (data[7] == 3){
       (SpeedAdjust = 0.75);  
     }
-    if (data[8] == 2){
+    if (data[7] == 2){
       (SpeedAdjust = 0.5);  
     }
-    if (data[8] == 1){
+    if (data[7] == 1){
       (SpeedAdjust = 0.25);  
     }
 //---( Section for DC Motor Driving )---//  
@@ -154,6 +154,6 @@ float FinalSpeedForwards = (Forwards * SpeedAdjust);
     else if (data[5] < 10 && data[6] < 10) 
             {driver.setOutput(0);
     }
-Serial.println(FinalSpeedForwards); 
+//Serial.println(FinalSpeedForwards); 
 } 
 //need an if radio disconnected/out of range set motor to 0

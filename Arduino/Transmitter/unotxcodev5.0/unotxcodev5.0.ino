@@ -31,7 +31,7 @@ int PowerPin1 = 2;//For an extra 5V output for Pot +
 RF24 radio(7, 8); // Create a Radio // (CE, CSN)
 
 //---( Declare General Variables )---/
-int Array[10]; //Can run into issues sending too many values, confirmed up to 8 works, might be a PC issue with too many com ports being used
+int Array[8]; //Can run into issues sending too many values, confirmed up to 8 works, might be a PC issue with too many com ports being used
 float SpeedAdjust = 1; 
 float constrainedSpeedAdjust = constrain(SpeedAdjust, 0.25, 1);
 
@@ -95,9 +95,9 @@ void loop() {
    Array[4] = (PS4.getAnalogHat(RightHatY));  
    Array[5] = (PS4.getAnalogButton(R2));
    Array[6] = (PS4.getAnalogButton(L2));
-   Array[7] = (PS4.getButtonClick(SQUARE));
-   Array[8] = (PS4.getButtonClick(CIRCLE));
-   Array[9] = (constrainedSpeedAdjust);
+   Array[7] = (constrainedSpeedAdjust);
+//   Array[] = (PS4.getButtonClick(SQUARE));
+//   Array[] = (PS4.getButtonClick(CIRCLE));
 //   Array[] = (PS4.getAnalogButton(R1));
 //   Array[] = (PS4.getAnalogButton(L1));
 //   Array[] = (PS4.getButtonClick(CROSS));
@@ -124,7 +124,7 @@ void loop() {
       //Can maybe do something with later if battery is dying
 }
     Serial.println("Sent array = ");
-    for (byte i = 0; i < 9; i++) {
+    for (byte i = 0; i < 8; i++) {
         Serial.println(Array[i]);
     }
 if (radio.available());

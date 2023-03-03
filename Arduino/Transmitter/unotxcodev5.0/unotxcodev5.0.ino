@@ -32,8 +32,8 @@ RF24 radio(7, 8); // Create a Radio // (CE, CSN)
 
 //---( Declare General Variables )---/
 int Array[8]; //Can run into issues sending too many values, confirmed up to 8 works, might be a PC issue with too many com ports being used
-float SpeedAdjust = 1; 
-float constrainedSpeedAdjust = constrain(SpeedAdjust, 0.25, 1);
+int SpeedAdjust = 4;
+
 
 void setup()   /**** SETUP: RUNS ONCE ****/
 {
@@ -68,24 +68,26 @@ void loop() {
       Usb.Task();
       if (PS4.connected()) 
 { 
-  if (PS4.getButtonClick(SQUARE) == true ){
-      (SpeedAdjust = SpeedAdjust + 0.25);
+  
+  if (PS4.getButtonClick(SQUARE) == 1 ){
+      (SpeedAdjust = SpeedAdjust + 1);
   }
-  if (PS4.getButtonClick(CIRCLE) == true ){
-      (SpeedAdjust = SpeedAdjust - 0.25);
+  if (PS4.getButtonClick(CIRCLE) == 1 ){
+      (SpeedAdjust = SpeedAdjust - 1);
   }
-  if (SpeedAdjust = 1) {
+  if (SpeedAdjust = 4) {
       PS4.setLed(Green);
   }
-  if (SpeedAdjust = 0.75) {
+  if (SpeedAdjust = 3) {
       PS4.setLed(Blue);
   }
-  if (SpeedAdjust = 0.50) {
+  if (SpeedAdjust = 2) {
       PS4.setLed(Yellow);
   }
-  if (SpeedAdjust = 0.25) {
+  if (SpeedAdjust = 1) {
       PS4.setLed(Red);
   }
+//  float constrainedSpeedAdjust = constrain(SpeedAdjust, 0.25, 1);
    potVal = analogRead(potPin);      
    int adjust = map(potVal, 0, 1000, -45, 45); 
    Array[0] = adjust ; //Potentiometer mapped value
@@ -95,7 +97,7 @@ void loop() {
    Array[4] = (PS4.getAnalogHat(RightHatY));  
    Array[5] = (PS4.getAnalogButton(R2));
    Array[6] = (PS4.getAnalogButton(L2));
-   Array[7] = (constrainedSpeedAdjust);
+   Array[7] = (SpeedAdjust);
 //   Array[] = (PS4.getButtonClick(SQUARE));
 //   Array[] = (PS4.getButtonClick(CIRCLE));
 //   Array[] = (PS4.getAnalogButton(R1));

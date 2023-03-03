@@ -28,10 +28,12 @@ int potVal = 0;
 int PowerPin1 = 2;//For an extra 5V output for Pot +
 
 //---( Declare objects )---/
-RF24 radio(7, 8); // Create a Radio
+RF24 radio(7, 8); // Create a Radio // (CE, CSN)
 
 //---( Declare General Variables )---/
-int Array[9]; //Can run into issues sending too many values, confirmed up to 8 works
+int Array[10]; //Can run into issues sending too many values, confirmed up to 8 works, might be a PC issue with too many com ports being used
+float SpeedAdjust = 1; 
+float constrainedSpeedAdjust = constrain(SpeedAdjust, 0.25, 1);
 
 void setup()   /**** SETUP: RUNS ONCE ****/
 {
@@ -66,6 +68,24 @@ void loop() {
       Usb.Task();
       if (PS4.connected()) 
 { 
+  if (PS4.getButtonClick(SQUARE) == true ){
+      (SpeedAdjust = SpeedAdjust + 0.25);
+  }
+  if (PS4.getButtonClick(CIRCLE) == true ){
+      (SpeedAdjust = SpeedAdjust - 0.25);
+  }
+  if (SpeedAdjust = 1) {
+      PS4.setLed(Green);
+  }
+  if (SpeedAdjust = 0.75) {
+      PS4.setLed(Blue);
+  }
+  if (SpeedAdjust = 0.50) {
+      PS4.setLed(Yellow);
+  }
+  if (SpeedAdjust = 0.25) {
+      PS4.setLed(Red);
+  }
    potVal = analogRead(potPin);      
    int adjust = map(potVal, 0, 1000, -45, 45); 
    Array[0] = adjust ; //Potentiometer mapped value
@@ -75,22 +95,23 @@ void loop() {
    Array[4] = (PS4.getAnalogHat(RightHatY));  
    Array[5] = (PS4.getAnalogButton(R2));
    Array[6] = (PS4.getAnalogButton(L2));
-   Array[7] = (PS4.getAnalogButton(R1));
-   Array[8] = (PS4.getAnalogButton(L1));
-//   Array[9] = (PS4.getButtonPress(CROSS));
-//   Array[10] = (PS4.getButtonPress(TRIANGLE));
-//   Array[11] = (PS4.getButtonPress(SQUARE));
-//   Array[12] = (PS4.getButtonPress(CIRCLE));
-//   Array[13] = (PS4.getButtonPress(R3));
-//   Array[14] = (PS4.getButtonPress(L3));
-//   Array[15] = (PS4.getButtonPress(LEFT));
-//   Array[16] = (PS4.getButtonPress(RIGHT));
-//   Array[17] = (PS4.getButtonPress(UP));
-//   Array[18] = (PS4.getButtonPress(DOWN));
-//   Array[19] = (PS4.getButtonPress(TOUCHPAD));
-//   Array[20] = (PS4.getButtonPress(OPTIONS));
-//   Array[21] = (PS4.getButtonPress(SHARE));
-//   Array[22] = (PS4.getButtonPress(PS));
+   Array[7] = (PS4.getButtonClick(SQUARE));
+   Array[8] = (PS4.getButtonClick(CIRCLE));
+   Array[9] = (constrainedSpeedAdjust);
+//   Array[] = (PS4.getAnalogButton(R1));
+//   Array[] = (PS4.getAnalogButton(L1));
+//   Array[] = (PS4.getButtonClick(CROSS));
+//   Array[] = (PS4.getButtonClick(TRIANGLE));
+//   Array[] = (PS4.getButtonPress(R3));
+//   Array[] = (PS4.getButtonPress(L3));
+//   Array[] = (PS4.getButtonPress(LEFT));
+//   Array[] = (PS4.getButtonPress(RIGHT));
+//   Array[] = (PS4.getButtonPress(UP));
+//   Array[] = (PS4.getButtonPress(DOWN));
+//   Array[] = (PS4.getButtonPress(TOUCHPAD));
+//   Array[] = (PS4.getButtonPress(OPTIONS));
+//   Array[] = (PS4.getButtonPress(SHARE));
+//   Array[] = (PS4.getButtonPress(PS));
 
 
 // Can change press to click if i want it to return true only when its initially pressed

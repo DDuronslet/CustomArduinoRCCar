@@ -36,10 +36,10 @@ const uint64_t pipe[1] = { 0xE8E8F0F0E1LL }; // Define the transmit pipe
 RF24 radio(19, 18); // Create a Radio(CE, CSN)
 
 //---( Declare Variables )---/
-int data[9];
-int gotArray[9];
-
+int data[8];
+int gotArray[8];
 int servoAngle;
+float SpeedAdjust = 1; 
 
 //enum Buttons {
 //    Adjust,            // 0
@@ -49,22 +49,7 @@ int servoAngle;
 //    RIGHT_ANALOG_Y,    // 4
 //    R2,                // 5
 //    L2,                // 6
-//    R1,                // 7
-//    L1,                // 8
-//    CROSS,             // 9
-//    TRIANGLE,          // 10
-//    SQUARE,            // 11
-//    CIRCLE,            // 12
-//    R3,                // 13
-//    L3,                // 14
-//    LEFT,              // 15
-//    RIGHT,             // 16
-//    UP,                // 17
-//    DOWN,              // 18
-//    TOUCHPAD,          // 19
-//    OPTIONS,           // 20
-//    SHARE,             // 21
-//    PS,                // 22
+//    SpeedAdjust,       // 7               
 //};
 
 
@@ -105,11 +90,45 @@ void loop()   /**** LOOP: RUNS CONSTANTLY ****/
     }
     Serial.println("Received array = ");
     for (byte i = 0; i < 9; i++) {
-        Serial.println(gotArray[i]);
+//        Serial.println(gotArray[i]);
         data[i] = gotArray[i];
                                     }
 
-//    Serial.println();
+//Steering Loop
+int AnalogStick = map(data[1] , 1, 255, 132 , 54);
+    if (data[1] = 0) {
+      myservo.write(95 + data[0]);}
+    else if ( data[1] < 125) {
+      myservo.write(AnalogStick + data[0]); }
+    else if ( data[1] > 140) {
+      myservo.write(AnalogStick + data[0]); }
+    else {
+      myservo.write(95 + data[0]);
+    }
+//130-131 is max left
+//52-53 is max right  
+
+//---( Section for Braking )---//
+//    if (data[CROSS] == 1 ) {
+//        driver.setBrakeMode(1);
+//    }
+//    else {
+//        driver.setBrakeMode(0);
+//    }
+//---( Section for DC Motor SpeedAdjust )---//    
+    if (data[8] == 4){
+      (SpeedAdjust = 1);  
+    }
+    if (data[8] == 3){
+      (SpeedAdjust = 0.75);  
+    }
+    if (data[8] == 2){
+      (SpeedAdjust = 0.5);  
+    }
+    if (data[8] == 1){
+      (SpeedAdjust = 0.25);  
+    }
+//---( Section for DC Motor Driving )---//  
 int Forwards = map(data[5] , 255, 5, 1, 100);
 int Reverse = map(data[6] , 255, 5, 1, 100);
 //    Boundary Check
@@ -125,60 +144,9 @@ int Reverse = map(data[6] , 255, 5, 1, 100);
     if (Reverse > 100)  {
       Reverse = 100;
     }
-
-//Steering Loop
-int AnalogStick = map(data[1] , 1, 255, 132 , 54);
-//     if ( data[LEFT_ANALOG_X] == 0 ) {
-//          myservo.write(95);
-//          myservo.write(95);
-//    }
-//     else if ( data[LEFT_ANALOG_X] < 125 || data[LEFT_ANALOG_X] > 140  ) {    //<130 is going left
-//          myservo.write(AnalogStick) ;
-//    } 
-//     if ( data[1] < 125 ) {
-//           myservo.write(AnalogStick) ;
-//    }
-//    else if ( data[1] > 140) {
-//           myservo.write(AnalogStick) ;
-//    }
-    if (data[1] = 0) {
-      myservo.write(95 + data[0]);}
-    else if ( data[1] < 125) {
-      myservo.write(AnalogStick + data[0]); }
-    else if ( data[1] > 140) {
-      myservo.write(AnalogStick + data[0]); }
-   
-//In case I want to change my == 0 if statement to prevent servo from full sending when I get a full 0 array
-//if ( data[LEFT_ANALOG_X] < 125 && data[LEFT_ANALOG_X] > 0 || data[LEFT_ANALOG_X] > 140  ) {    // jic to stop servo from going when tx is off
-//  myservo.write(AnalogStick) ;  }
-    
-    else {
-      myservo.write(95);
-    }
-//130-131 is max left
-//52-53 is max right  
-    
-//---( Debug Section )---//
-//    Serial.print("Left Analog X: ");
-//    Serial.println(data[LEFT_ANALOG_X]);
-//    Serial.print("AnalogStick: ");  
-//    Serial.println(AnalogStick);//always returns 94
-//    Serial.print("R2: ");  
-//    Serial.println(Forwards);//
-//    Serial.print("R2: ");  
-//    Serial.println(Forwards);
-  
-//---( Section for Braking )---//
-//    if (data[CROSS] == 1 ) {
-//        driver.setBrakeMode(1);
-//    }
-//    else {
-//        driver.setBrakeMode(0);
-//    }
-    
-//---( Section for DC Motor Driving )---//  
+float FinalSpeedForwards = (Forwards * SpeedAdjust); 
     if (data[5] > 10) {
-            driver.setOutput(-Forwards); //Forwards
+            driver.setOutput(-FinalSpeedForwards); //Forwards
     }
     else if (data[6] > 10) {
             driver.setOutput(Reverse);//Backwards
@@ -186,6 +154,6 @@ int AnalogStick = map(data[1] , 1, 255, 132 , 54);
     else if (data[5] < 10 && data[6] < 10) 
             {driver.setOutput(0);
     }
-    
+Serial.println(FinalSpeedForwards); 
 } 
 //need an if radio disconnected/out of range set motor to 0

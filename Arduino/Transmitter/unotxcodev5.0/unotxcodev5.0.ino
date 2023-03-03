@@ -68,26 +68,31 @@ void loop() {
       Usb.Task();
       if (PS4.connected()) 
 { 
-  
+  if (SpeedAdjust < 1) {
+    (SpeedAdjust = 1);
+  }
+  if (SpeedAdjust > 4 ) {
+    (SpeedAdjust = 4);
+  }
   if (PS4.getButtonClick(SQUARE) == 1 ){
       (SpeedAdjust = SpeedAdjust + 1);
   }
   if (PS4.getButtonClick(CIRCLE) == 1 ){
       (SpeedAdjust = SpeedAdjust - 1);
   }
-  if (SpeedAdjust = 4) {
+  if (SpeedAdjust == 4) {
       PS4.setLed(Green);
   }
-  if (SpeedAdjust = 3) {
+  if (SpeedAdjust == 3) {
       PS4.setLed(Blue);
   }
-  if (SpeedAdjust = 2) {
+  if (SpeedAdjust == 2) {
       PS4.setLed(Yellow);
   }
-  if (SpeedAdjust = 1) {
+  if (SpeedAdjust == 1) {
       PS4.setLed(Red);
   }
-//  float constrainedSpeedAdjust = constrain(SpeedAdjust, 0.25, 1);
+//   float SpeedAdjust = constrain(SpeedAdjust, 1, 4);
    potVal = analogRead(potPin);      
    int adjust = map(potVal, 0, 1000, -45, 45); 
    Array[0] = adjust ; //Potentiometer mapped value

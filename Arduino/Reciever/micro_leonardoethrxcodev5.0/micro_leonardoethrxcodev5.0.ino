@@ -88,7 +88,7 @@ void loop()   /**** LOOP: RUNS CONSTANTLY ****/
         // Fetch the data payload        
         radio.read(&gotArray, sizeof(gotArray));
     }
-    Serial.println("Received array = ");
+//    Serial.println("Received array = ");
     for (byte i = 0; i < 8; i++) {
 //        Serial.println(gotArray[i]);
         data[i] = gotArray[i];
@@ -144,7 +144,8 @@ int Reverse = map(data[6] , 255, 5, 1, 100);
     if (Reverse > 100)  {
       Reverse = 100;
     }
-float FinalSpeedForwards = (Forwards * SpeedAdjust); 
+int FinalSpeedForwards = (Forwards * SpeedAdjust);
+//int SpeedForwards = (Forwards * SpeedAdjust); 
     if (data[5] > 10) {
             driver.setOutput(-FinalSpeedForwards); //Forwards
     }
@@ -154,6 +155,11 @@ float FinalSpeedForwards = (Forwards * SpeedAdjust);
     else if (data[5] < 10 && data[6] < 10) 
             {driver.setOutput(0);
     }
+//Serial.println("Forwards = ");
+//Serial.println(Forwards);
+//Serial.println("FinalSpeed = ");
+//Serial.println(FinalSpeedForwards); 
+//Serial.println("IntSpeed = ");
 //Serial.println(FinalSpeedForwards); 
 } 
 //need an if radio disconnected/out of range set motor to 0

@@ -17,10 +17,9 @@
 #define CS_PIN 18
 
 // TB9051FTGMotorCarrier pin definitions(should all be PWM)
-const int enPin = 5;
-const int enBPin = 10;
-const int pwm1Pin = 9;
-const int pwm2Pin = 6;
+const  uint8_t enPin = 10;
+const  uint8_t pwm1Pin = 6;
+const  uint8_t pwm2Pin = 5;
 
 //FOR SERVO (Steering)
 Servo myservo;
@@ -73,7 +72,6 @@ void setup()   /**** SETUP: RUNS ONCE ****/
 
 //Driver Setup 
   pinMode(enPin, OUTPUT);
-  pinMode(enBPin, OUTPUT);
   pinMode(pwm1Pin, OUTPUT);
   pinMode(pwm2Pin, OUTPUT);
 //  pinMode(brakeModePin, INPUT_PULLUP);
@@ -151,35 +149,39 @@ int Reverse = map(data[6] , 0, 255, 0, 255);
 int FinalSpeedForwards = (Forwards * SpeedAdjust);
 
     if (Forwards > 5) {
+      digitalWrite(enPin, HIGH);    // Enable
       analogWrite(pwm1Pin, Forwards);  // Forward
       analogWrite(pwm2Pin, 0);
-      digitalWrite(enPin, HIGH);    // Enable
-      digitalWrite(enBPin, LOW);
     }
     else if (Reverse > 5) {
+      digitalWrite(enPin, HIGH); //Enable
       analogWrite(pwm1Pin, 0);      // Reverse
       analogWrite(pwm2Pin, Reverse);
-      digitalWrite(enPin, HIGH);     // Enable
-      digitalWrite(enBPin, LOW);
     }
-//    else if (Forwards < 5 && Reverse < 5){
-//      analogWrite(pwm1Pin, 0);      // Stop
-//      analogWrite(pwm2Pin, 0);
-//      digitalWrite(enPin, LOW);     // Disable
-//      digitalWrite(enBPin, LOW);
-//    }
+    else if (Forwards < 5 && Reverse < 5){
+      digitalWrite(enPin, LOW);     // Disable
+      analogWrite(pwm1Pin, 0);      // Stop
+      analogWrite(pwm2Pin, 0);
+      
+    }
 //        else if (Forwards > 25 && Reverse > 25){
 //      analogWrite(pwm1Pin, 0);      // Stop
 //      analogWrite(pwm2Pin, 0);
 //      digitalWrite(enPin, LOW);     // Disable
 //      digitalWrite(enBPin, LOW);
 //    }
-//      analogWrite(pwm1Pin, 255);  // Forward
+//      analogWrite(pwm1Pin, 100);  // Forward
 //      analogWrite(pwm2Pin, 0);
 //      digitalWrite(enPin, HIGH);    // Enable
 //      digitalWrite(enBPin, LOW);
+//      delay(1000);
+//      analogWrite(pwm1Pin, 0);  // Forward
+//      analogWrite(pwm2Pin, 100);
+//      digitalWrite(enPin, HIGH);    // Enable
+//      digitalWrite(enBPin, LOW);
+//      delay(1000);
 //Serial.println("Forwards = ");
-Serial.println(Forwards);
+//Serial.println(Forwards);
 //Serial.println("FinalSpeed = ");
 //Serial.println(FinalSpeedForwards); 
 //Serial.println("IntSpeed = ");

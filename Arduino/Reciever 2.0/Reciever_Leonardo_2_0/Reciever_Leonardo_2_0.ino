@@ -8,7 +8,7 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include <Servo.h>
-#include <TB9051FTGMotorCarrier.h>
+//#include <TB9051FTGMotorCarrier.h>
 
 //RF24 definitions
 #define SCK_PIN 15
@@ -16,14 +16,11 @@
 #define MOSI_PIN 16
 #define CS_PIN 18
 
-// TB9051FTGMotorCarrier pin definitions
-static constexpr uint8_t pwm1Pin{9};
-static constexpr uint8_t pwm2Pin{6};
-static constexpr uint8_t enPin{5};
-
-// Instantiate TB9051FTGMotorCarrier
-static TB9051FTGMotorCarrier driver{pwm1Pin, pwm2Pin, 255, 255, 255, enPin, 255 };
-//need to short OCC, and both EN
+// TB9051FTGMotorCarrier pin definitions(should all be PWM)
+const int enPin = 5;
+const int enBPin = 10;
+const int pwm1Pin = 9;
+const int pwm2Pin = 6;
 
 //FOR SERVO (Steering)
 Servo myservo;
@@ -49,7 +46,8 @@ float SpeedAdjust = 1;
 //    RIGHT_ANALOG_Y,    // 4
 //    R2,                // 5
 //    L2,                // 6
-//    SpeedAdjust,       // 7               
+//    SpeedAdjust,       // 7 
+// need 2 more inputs to allow brakemodes?              
 //};
 
 
@@ -73,8 +71,12 @@ void setup()   /**** SETUP: RUNS ONCE ****/
     radio.startListening();
     radio.setPALevel(RF24_PA_MAX); //MAX can also be HIGH and LOW?
 
-//Motor DriverSetup
-    driver.enable();
+//Driver Setup 
+  pinMode(enPin, OUTPUT);
+  pinMode(enBPin, OUTPUT);
+  pinMode(pwm1Pin, OUTPUT);
+  pinMode(pwm2Pin, OUTPUT);
+//  pinMode(brakeModePin, INPUT_PULLUP);
 
 //Servo Setup
     myservo.attach(servoPin);
@@ -129,38 +131,59 @@ int AnalogStick = map(data[1] , 1, 255, 132 , 54);
       (SpeedAdjust = 0.25);  
     }
 //---( Section for DC Motor Driving )---//  
-int Forwards = map(data[5] , 255, 5, 1, 100);
-int Reverse = map(data[6] , 255, 5, 1, 100);
+int Forwards = map(data[5] , 0, 255, 0, 255);
+int Reverse = map(data[6] , 0, 255, 0, 255);
+//int Forwards = data[5];
+//int Reverse = data[6];
 //    Boundary Check
-    if (Forwards < 0)  {
-      Forwards = 0;
-    }
-    if (Forwards > 100)  {
-      Forwards = 100;
-    }
-    if (Reverse < 0 )  {
-      Reverse = 0;
-    }
-    if (Reverse > 100)  {
-      Reverse = 100;
-    }
+//    if (Forwards < 0)  {
+//      Forwards = 0;
+//    }
+//    if (Forwards > 255)  {
+//      Forwards = 255;
+//    }
+//    if (Reverse < 0 )  {
+//      Reverse = 0;
+//    }
+//    if (Reverse > 255)  {
+//      Reverse = 255;
+//    }
 int FinalSpeedForwards = (Forwards * SpeedAdjust);
-//int SpeedForwards = (Forwards * SpeedAdjust); 
-    if (data[5] > 10) {
-            driver.setOutput(-FinalSpeedForwards); //Forwards
+
+    if (Forwards > 5) {
+      analogWrite(pwm1Pin, Forwards);  // Forward
+      analogWrite(pwm2Pin, 0);
+      digitalWrite(enPin, HIGH);    // Enable
+      digitalWrite(enBPin, LOW);
     }
-    else if (data[6] > 10) {
-            driver.setOutput(Reverse);//Backwards
+    else if (Reverse > 5) {
+      analogWrite(pwm1Pin, 0);      // Reverse
+      analogWrite(pwm2Pin, Reverse);
+      digitalWrite(enPin, HIGH);     // Enable
+      digitalWrite(enBPin, LOW);
     }
-    else if (data[5] < 10 && data[6] < 10) 
-            {driver.setOutput(0);
-    }
+//    else if (Forwards < 5 && Reverse < 5){
+//      analogWrite(pwm1Pin, 0);      // Stop
+//      analogWrite(pwm2Pin, 0);
+//      digitalWrite(enPin, LOW);     // Disable
+//      digitalWrite(enBPin, LOW);
+//    }
+//        else if (Forwards > 25 && Reverse > 25){
+//      analogWrite(pwm1Pin, 0);      // Stop
+//      analogWrite(pwm2Pin, 0);
+//      digitalWrite(enPin, LOW);     // Disable
+//      digitalWrite(enBPin, LOW);
+//    }
+//      analogWrite(pwm1Pin, 255);  // Forward
+//      analogWrite(pwm2Pin, 0);
+//      digitalWrite(enPin, HIGH);    // Enable
+//      digitalWrite(enBPin, LOW);
 //Serial.println("Forwards = ");
-//Serial.println(Forwards);
+Serial.println(Forwards);
 //Serial.println("FinalSpeed = ");
 //Serial.println(FinalSpeedForwards); 
 //Serial.println("IntSpeed = ");
 //Serial.println(FinalSpeedForwards); 
-Serial.println(Reverse);
+//Serial.println(Reverse);
 } 
 //need an if radio disconnected/out of range set motor to 0

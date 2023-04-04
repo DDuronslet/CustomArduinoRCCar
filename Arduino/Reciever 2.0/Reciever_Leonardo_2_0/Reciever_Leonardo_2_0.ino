@@ -33,8 +33,8 @@ int data[9];
 int gotArray[9];
 int servoAngle = 95;
 float SpeedAdjust = 1; 
-bool skipCode = flase; 
-uint16_t counter = 1;
+bool skipCode = false; 
+uint16_t counter = 0;
 uint16_t prevCounter = 1;
 
 //enum Buttons {
@@ -102,7 +102,7 @@ data[8] = counter;
       prevCounter = counter;
     }
     counter = prevCounter;
-  }
+  
 if (!skipCode) {
 //Steering Loop
 int AnalogStick = map(data[1] , 1, 255, 132 , 54);

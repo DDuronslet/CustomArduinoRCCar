@@ -34,8 +34,8 @@ int gotArray[9];
 int servoAngle = 95;
 float SpeedAdjust = 1; 
 bool skipCode = false; 
-uint16_t counter = 0;
-uint16_t prevCounter = 1;
+uint16_t counter = 1;
+uint16_t prevCounter = 0;
 
 //enum Buttons {
 //    Adjust,            // 0
@@ -78,7 +78,7 @@ void setup()   /**** SETUP: RUNS ONCE ****/
 
 //Servo Setup
     myservo.attach(servoPin);
-    
+    myservo.write(servoAngle);
 }
 //--(end setup )-
 

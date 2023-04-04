@@ -31,9 +31,9 @@ int PowerPin1 = 2;//For an extra 5V output for Pot +
 RF24 radio(7, 8); // Create a Radio // (CE, CSN)
 
 //---( Declare General Variables )---/
-int Array[8]; //Can run into issues sending too many values, confirmed up to 8 works, might be a PC issue with too many com ports being used
-int SpeedAdjust = 4;
-
+int Array[9]; //Can run into issues sending too many values, confirmed up to 8 works, might be a PC issue with too many com ports being used
+int SpeedAdjust = 4; //Variable to adjust top speed
+int count = 0; //Count variable to determine if disconnected
 
 void setup()   /**** SETUP: RUNS ONCE ****/
 {
@@ -68,8 +68,10 @@ void loop() {
       Usb.Task();
       if (PS4.connected()) 
 { 
-//SpeedLimiter section(may have to change if <1 or >4 to contrains later
-
+  count++; // Increase count by one each loop
+if (count == 5000) {
+  count = 0; // reset count when it hits 5000
+}
   if (PS4.getButtonClick(SQUARE) == 1 ){
       (SpeedAdjust = SpeedAdjust + 1);
   }
@@ -105,6 +107,7 @@ void loop() {
    Array[5] = (PS4.getAnalogButton(R2));
    Array[6] = (PS4.getAnalogButton(L2));
    Array[7] = (SpeedAdjust);
+   Array[8] = count;
 //   Array[] = (PS4.getButtonClick(SQUARE));
 //   Array[] = (PS4.getButtonClick(CIRCLE));
 //   Array[] = (PS4.getAnalogButton(R1));
@@ -133,7 +136,7 @@ void loop() {
       //Can maybe do something with later if battery is dying
 }
     Serial.println("Sent array = ");
-    for (byte i = 0; i < 8; i++) {
+    for (byte i = 0; i < 9; i++) {
         Serial.println(Array[i]);
     }
 if (radio.available());

@@ -8,13 +8,13 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include <Servo.h>
-//#include <TB9051FTGMotorCarrier.h>
 
 //RF24 definitions
 #define SCK_PIN 15
 #define MISO_PIN 14
 #define MOSI_PIN 16
 #define CS_PIN 18
+RF24 radio(19, 18); // Create a Radio(CE, CSN)
 
 // TB9051FTGMotorCarrier pin definitions(should all be PWM)
 const  uint8_t enPin = 10;
@@ -28,14 +28,14 @@ Servo myservo;
 // NOTE: the "LL" at the end of the constant is "LongLong" type
 const uint64_t pipe[1] = { 0xE8E8F0F0E1LL }; // Define the transmit pipe
 
-//---( Declare objects )---/
-RF24 radio(19, 18); // Create a Radio(CE, CSN)
-
 //---( Declare Variables )---/
-int data[8];
-int gotArray[8];
-int servoAngle;
+int data[9];
+int gotArray[9];
+int servoAngle = 95;
 float SpeedAdjust = 1; 
+bool skipCode = flase; 
+uint16_t counter = 1;
+uint16_t prevCounter = 1;
 
 //enum Buttons {
 //    Adjust,            // 0
@@ -45,7 +45,8 @@ float SpeedAdjust = 1;
 //    RIGHT_ANALOG_Y,    // 4
 //    R2,                // 5
 //    L2,                // 6
-//    SpeedAdjust,       // 7 
+//    SpeedAdjust,       // 7
+//    counter            // 8 
 // need 2 more inputs to allow brakemodes?              
 //};
 
@@ -74,7 +75,6 @@ void setup()   /**** SETUP: RUNS ONCE ****/
   pinMode(enPin, OUTPUT);
   pinMode(pwm1Pin, OUTPUT);
   pinMode(pwm2Pin, OUTPUT);
-//  pinMode(brakeModePin, INPUT_PULLUP);
 
 //Servo Setup
     myservo.attach(servoPin);
@@ -88,12 +88,22 @@ void loop()   /**** LOOP: RUNS CONSTANTLY ****/
         // Fetch the data payload        
         radio.read(&gotArray, sizeof(gotArray));
     }
-//    Serial.println("Received array = ");
-    for (byte i = 0; i < 8; i++) {
-//        Serial.println(gotArray[i]);
+    Serial.println("Received array = ");
+    for (byte i = 0; i < 9; i++) {
+        Serial.println(gotArray[i]);
         data[i] = gotArray[i];
                                     }
-
+data[8] = counter;
+ if (counter == prevCounter) {
+      skipCode = true;
+    }
+    else {
+      skipCode = false;
+      prevCounter = counter;
+    }
+    counter = prevCounter;
+  }
+if (!skipCode) {
 //Steering Loop
 int AnalogStick = map(data[1] , 1, 255, 132 , 54);
     if (data[1] = 0) {
@@ -102,19 +112,12 @@ int AnalogStick = map(data[1] , 1, 255, 132 , 54);
       myservo.write(AnalogStick + data[0]); }
     else if ( data[1] > 140) {
       myservo.write(AnalogStick + data[0]); }
-    else {
-      myservo.write(95 + data[0]);
-    }
+//    else {
+//      myservo.write(95 + data[0]);
+//    }
 //130-131 is max left
 //52-53 is max right  
 
-//---( Section for Braking )---//
-//    if (data[CROSS] == 1 ) {
-//        driver.setBrakeMode(1);
-//    }
-//    else {
-//        driver.setBrakeMode(0);
-//    }
 //---( Section for DC Motor SpeedAdjust )---//    
     if (data[7] == 4){
       (SpeedAdjust = 1);  
@@ -126,66 +129,40 @@ int AnalogStick = map(data[1] , 1, 255, 132 , 54);
       (SpeedAdjust = 0.5);  
     }
     if (data[7] == 1){
-      (SpeedAdjust = 0.25);  
+      (SpeedAdjust = 0.35);  
     }
 //---( Section for DC Motor Driving )---//  
 int Forwards = map(data[5] , 0, 255, 0, 255);
 int Reverse = map(data[6] , 0, 255, 0, 255);
-//int Forwards = data[5];
-//int Reverse = data[6];
-//    Boundary Check
-//    if (Forwards < 0)  {
-//      Forwards = 0;
-//    }
-//    if (Forwards > 255)  {
-//      Forwards = 255;
-//    }
-//    if (Reverse < 0 )  {
-//      Reverse = 0;
-//    }
-//    if (Reverse > 255)  {
-//      Reverse = 255;
-//    }
-int FinalSpeedForwards = (Forwards * SpeedAdjust);
 
+int FinalSpeedForwards = (Forwards * SpeedAdjust);
+//Boundary Check
+ if (FinalSpeedForwards < 0)  {
+      FinalSpeedForwards = 0;
+    }
+ if (Reverse < 0 )  {
+      Reverse = 0;
+    }   
+//Drive Forwards/Backwards
     if (Forwards > 5) {
       digitalWrite(enPin, HIGH);    // Enable
-      analogWrite(pwm1Pin, Forwards);  // Forward
-      analogWrite(pwm2Pin, 0);
+      analogWrite(pwm1Pin, 0 );  // Forward
+      analogWrite(pwm2Pin, FinalSpeedForwards);
     }
     else if (Reverse > 5) {
       digitalWrite(enPin, HIGH); //Enable
-      analogWrite(pwm1Pin, 0);      // Reverse
-      analogWrite(pwm2Pin, Reverse);
+      analogWrite(pwm1Pin, Reverse);      // Reverse
+      analogWrite(pwm2Pin, 0);
     }
-    else if (Forwards < 5 && Reverse < 5){
-      digitalWrite(enPin, LOW);     // Disable
+    else if (  Forwards < 25  && Reverse < 25 ) {
+      digitalWrite(enPin, LOW);     // Enable
+      analogWrite(pwm1Pin, 0);      // Coast
+      analogWrite(pwm2Pin, 0);
+    }
+    else if (Forwards > 255 || Reverse > 255) {
+      digitalWrite(enPin, HIGH);     // Enable
       analogWrite(pwm1Pin, 0);      // Stop
       analogWrite(pwm2Pin, 0);
-      
     }
-//        else if (Forwards > 25 && Reverse > 25){
-//      analogWrite(pwm1Pin, 0);      // Stop
-//      analogWrite(pwm2Pin, 0);
-//      digitalWrite(enPin, LOW);     // Disable
-//      digitalWrite(enBPin, LOW);
-//    }
-//      analogWrite(pwm1Pin, 100);  // Forward
-//      analogWrite(pwm2Pin, 0);
-//      digitalWrite(enPin, HIGH);    // Enable
-//      digitalWrite(enBPin, LOW);
-//      delay(1000);
-//      analogWrite(pwm1Pin, 0);  // Forward
-//      analogWrite(pwm2Pin, 100);
-//      digitalWrite(enPin, HIGH);    // Enable
-//      digitalWrite(enBPin, LOW);
-//      delay(1000);
-//Serial.println("Forwards = ");
-//Serial.println(Forwards);
-//Serial.println("FinalSpeed = ");
-//Serial.println(FinalSpeedForwards); 
-//Serial.println("IntSpeed = ");
-//Serial.println(FinalSpeedForwards); 
-//Serial.println(Reverse);
+}
 } 
-//need an if radio disconnected/out of range set motor to 0

@@ -78,7 +78,7 @@ void setup()   /**** SETUP: RUNS ONCE ****/
 
 //Servo Setup
     myservo.attach(servoPin);
-    myservo.write(servoAngle);
+    
 }
 //--(end setup )-
 
@@ -93,17 +93,16 @@ void loop()   /**** LOOP: RUNS CONSTANTLY ****/
         Serial.println(gotArray[i]);
         data[i] = gotArray[i];
                                     }
-data[8] = counter;
- if (counter == prevCounter) {
-      skipCode = true;
-    }
-    else {
-      skipCode = false;
-      prevCounter = counter;
-    }
-    counter = prevCounter;
-  
-if (!skipCode) {
+//data[8] = counter;
+// if (counter == prevCounter) {
+//      skipCode = true;
+//    }
+//    else {
+//      skipCode = false;
+//    }
+//    counter = prevCounter;
+//  
+//if (!skipCode) {
 //Steering Loop
 int AnalogStick = map(data[1] , 1, 255, 132 , 54);
     if (data[1] = 0) {
@@ -165,4 +164,4 @@ int FinalSpeedForwards = (Forwards * SpeedAdjust);
       analogWrite(pwm2Pin, 0);
     }
 }
-} 
+//} 

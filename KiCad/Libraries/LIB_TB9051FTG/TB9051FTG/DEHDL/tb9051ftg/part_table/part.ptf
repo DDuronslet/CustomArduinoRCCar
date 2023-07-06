@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'TB9051FTG'
+CLASS = IC
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "ARROW_PART_NUMBER", "ARROW_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Toshiba", "TB9051FTG" (!) = "", "TB9051FTG", "Other", "", "", "", "", "PWM type single channel H-Bridge DC brushed motor driver for automotive use", "https://toshiba.semicon-storage.com/ap-en/semiconductor/product/automotive-devices/detail.TB9051FTG.html", "1.8 mm"
+END_PART
+
+END.

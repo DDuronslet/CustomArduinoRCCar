@@ -1,0 +1,10 @@
+(unit MM)
+
+(package "TB9051FTG"
+    (type UNDEF)
+    (uver 2)
+    (mountForm default
+        (footprintRef "TB9051FTG")
+        (spec "default")
+    )
+)

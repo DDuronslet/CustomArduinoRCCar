@@ -1,0 +1,19 @@
+.TB9051FTG :1 ;PWM type single channel H-Bridge DC brushed motor driver for automotive use
+TB9051FTG
+*STM IC
+*NGS
+*PNM 1=1 2=2 3=3 4=4 5=5 6=6 7=7 8=8 9=9 10=10 11=11 12=12 13=13 14=14 15=15 16=16 17=17 18=18 19=19 20=20 21=21 22=22 23=23 24=24 25=25 26=26 27=27 28=28 29=29 30=C1 31=C2 32=C3 33=C4
+*PLB 1="OCC" 2="VCC" 3="ENB" 4="AGND" 5="EN" 6="NC_1" 7="OCM" 8="PWM1" 9="PWM2" 10="NC_2" 11="VBAT_1" 12="VBAT_2" 13="OUT1_1" 14="OUT1_2" 15="PGND_1" 16="PGND_2" 17="PGND_3" 18="DIAG" 19="PGND_4" 20="PGND_5" 21="PGND_6" 22="OUT2_1" 23="OUT2_2" 24="VBAT_3" 25="VBAT_4" 26="NC_3" 27="TEST1" 28="TEST2" 29="EP" 30="CORNER1" 31="CORNER2" 32="CORNER3" 33="CORNER4"
+*MXP 33
+*DFN TB9051FTG
+~!Manufacturer_Name (Toshiba)
+~!Manufacturer_Part_Number (TB9051FTG)
+~!Mouser Part Number (-)
+~!Mouser Price/Stock (-)
+~!Arrow Part Number (-)
+~!Arrow Price/Stock (-)
+~!Link Datasheet (https://toshiba.semicon-storage.com/ap-en/semiconductor/product/automotive-devices/detail.TB9051FTG.html)
+~!Height (1.8mm)
+~!3D_Model (TB9051FTG)
+TB9051FTG
+1.1!U 2.1!U 3.1!U 4.1!U 5.1!U 6.1!U 7.1!U 8.1!U 9.1!U 10.1!U 11.1!U 12.1!U 13.1!U 14.1!U 15.1!U 16.1!U 17.1!U 18.1!U 19.1!U 20.1!U 21.1!U 22.1!U 23.1!U 24.1!U 25.1!U 26.1!U 27.1!U 28.1!U 29.1!U 30.1!U 31.1!U 32.1!U 33.1!U 

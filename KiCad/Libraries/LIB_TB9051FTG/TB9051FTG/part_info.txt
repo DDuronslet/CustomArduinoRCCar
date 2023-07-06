@@ -1,0 +1,9 @@
+Manufacturer=Toshiba
+PartNumber=TB9051FTG
+PartCategory=Integrated Circuit
+PackageCategory=Other
+PinCount=33
+Version=1.4
+Released=2021-11-26 13:23:00
+Downloaded=2023-07-06 03:54:07
+3D=Y

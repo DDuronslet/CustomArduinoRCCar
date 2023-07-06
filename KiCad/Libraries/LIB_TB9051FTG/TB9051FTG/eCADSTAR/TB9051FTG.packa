@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "TB9051FTG"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2021-11-26-13:23:00)
+    (mountForm default
+        (footprintRef "TB9051FTG")
+        (spec "System")
+    )
+)

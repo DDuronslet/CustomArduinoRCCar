@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP TB9051FTG
+D PWM type single channel H-Bridge DC brushed motor driver for automotive use
+K
+F https://toshiba.semicon-storage.com/ap-en/semiconductor/product/automotive-devices/detail.TB9051FTG.html
+$ENDCMP
+#
+#End Doc Library

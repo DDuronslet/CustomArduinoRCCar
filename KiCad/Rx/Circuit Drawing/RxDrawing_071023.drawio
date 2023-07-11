@@ -1,0 +1,25 @@
+<mxfile host="app.diagrams.net" modified="2023-07-11T06:39:24.358Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="Lq78s0X-A-BrTYY1X5Um" version="21.6.1" type="device">
+  <diagram name="Page-1" id="JVo1X73a_x46Wm6prRyI">
+    <mxGraphModel dx="989" dy="527" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7euzpvgKWpI_wUwx-7iD-1" value="Arduino&lt;br&gt;Pro&amp;nbsp;&lt;br&gt;Micro" style="rounded=0;whiteSpace=wrap;html=1;rotation=90;noLabel=0;" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="200" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="7euzpvgKWpI_wUwx-7iD-3" value="Nrf&lt;br&gt;Power Reg" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="80" width="90" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7euzpvgKWpI_wUwx-7iD-4" value="Nrf" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="560" y="80" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7euzpvgKWpI_wUwx-7iD-6" value="Buck Boost" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="280" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7euzpvgKWpI_wUwx-7iD-7" value="Motor Driver" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="485" width="120" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
